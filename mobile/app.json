@@ -6,7 +6,6 @@
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "automatic",
-    "newArchEnabled": true,
     "scheme": "videoapp",
     "splash": {
       "image": "./assets/splash-icon.png",
@@ -22,7 +21,6 @@
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#1a1a2e"
       },
-      "edgeToEdgeEnabled": true,
       "package": "com.videoapp.mobile"
     },
     "web": {
@@ -32,9 +30,6 @@
     "plugins": [
       "expo-router",
       "expo-secure-store"
-    ],
-    "experiments": {
-      "typedRoutes": true
-    }
+    ]
   }
 }
