@@ -1,8 +1,5 @@
 /**
- * Login Screen
- * 
- * Allows users to login with email and password.
- * Pure UI component - all business logic is in AuthContext.
+ * Login Screen - Clean Black & White Theme
  */
 import React, { useState } from 'react';
 import {
@@ -25,11 +22,11 @@ export default function LoginScreen() {
   const [password, setPassword] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
+  const [focusedInput, setFocusedInput] = useState<string | null>(null);
   
   const { login } = useAuth();
 
   const handleLogin = async () => {
-    // Basic UI validation only - backend handles real validation
     if (!email.trim()) {
       Alert.alert('Error', 'Please enter your email');
       return;
@@ -42,7 +39,6 @@ export default function LoginScreen() {
     setIsLoading(true);
     try {
       await login(email.trim(), password);
-      // Navigation is handled automatically by the root layout
     } catch (error: unknown) {
       const errorMessage = 
         error instanceof Error 
@@ -55,88 +51,111 @@ export default function LoginScreen() {
   };
 
   return (
-    <KeyboardAvoidingView
-      style={styles.container}
-      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-    >
-      <ScrollView
-        contentContainerStyle={styles.scrollContent}
-        keyboardShouldPersistTaps="handled"
+    <View style={styles.container}>
+      <KeyboardAvoidingView
+        style={styles.keyboardView}
+        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
       >
-        <View style={styles.header}>
-          <Text style={styles.logo}>🎬</Text>
-          <Text style={styles.title}>Welcome Back</Text>
-          <Text style={styles.subtitle}>Sign in to continue watching</Text>
-        </View>
-
-        <View style={styles.form}>
-          <View style={styles.inputContainer}>
-            <Text style={styles.label}>Email</Text>
-            <TextInput
-              style={styles.input}
-              placeholder="Enter your email"
-              placeholderTextColor="#6c6c8f"
-              value={email}
-              onChangeText={setEmail}
-              keyboardType="email-address"
-              autoCapitalize="none"
-              autoCorrect={false}
-              editable={!isLoading}
-            />
-          </View>
-
-          <View style={styles.inputContainer}>
-            <Text style={styles.label}>Password</Text>
-            <View style={styles.passwordContainer}>
-              <TextInput
-                style={styles.passwordInput}
-                placeholder="Enter your password"
-                placeholderTextColor="#6c6c8f"
-                value={password}
-                onChangeText={setPassword}
-                secureTextEntry={!showPassword}
-                autoCapitalize="none"
-                editable={!isLoading}
-              />
-              <TouchableOpacity
-                style={styles.eyeButton}
-                onPress={() => setShowPassword(!showPassword)}
-              >
-                <Text style={styles.eyeIcon}>{showPassword ? '👁️' : '👁️‍🗨️'}</Text>
-              </TouchableOpacity>
+        <ScrollView
+          contentContainerStyle={styles.scrollContent}
+          keyboardShouldPersistTaps="handled"
+          showsVerticalScrollIndicator={false}
+        >
+          <View style={styles.header}>
+            <View style={styles.logoContainer}>
+              <View style={styles.logoBox}>
+                <Text style={styles.logoIcon}>V</Text>
+              </View>
             </View>
+            <Text style={styles.title}>Welcome Back</Text>
+            <Text style={styles.subtitle}>Sign in to continue</Text>
           </View>
 
-          <TouchableOpacity
-            style={[styles.button, isLoading && styles.buttonDisabled]}
-            onPress={handleLogin}
-            disabled={isLoading}
-          >
-            {isLoading ? (
-              <ActivityIndicator color="#fff" />
-            ) : (
-              <Text style={styles.buttonText}>Sign In</Text>
-            )}
-          </TouchableOpacity>
-        </View>
+          <View style={styles.formCard}>
+            <View style={styles.inputWrapper}>
+              <Text style={styles.label}>EMAIL</Text>
+              <View style={[
+                styles.inputContainer,
+                focusedInput === 'email' && styles.inputFocused
+              ]}>
+                <TextInput
+                  style={styles.input}
+                  placeholder="you@example.com"
+                  placeholderTextColor="#666"
+                  value={email}
+                  onChangeText={setEmail}
+                  onFocus={() => setFocusedInput('email')}
+                  onBlur={() => setFocusedInput(null)}
+                  keyboardType="email-address"
+                  autoCapitalize="none"
+                  autoCorrect={false}
+                  editable={!isLoading}
+                />
+              </View>
+            </View>
 
-        <View style={styles.footer}>
-          <Text style={styles.footerText}>Don't have an account? </Text>
-          <Link href="/(auth)/signup" asChild>
-            <TouchableOpacity disabled={isLoading}>
-              <Text style={styles.linkText}>Sign Up</Text>
+            <View style={styles.inputWrapper}>
+              <Text style={styles.label}>PASSWORD</Text>
+              <View style={[
+                styles.inputContainer,
+                focusedInput === 'password' && styles.inputFocused
+              ]}>
+                <TextInput
+                  style={styles.input}
+                  placeholder="Enter your password"
+                  placeholderTextColor="#666"
+                  value={password}
+                  onChangeText={setPassword}
+                  onFocus={() => setFocusedInput('password')}
+                  onBlur={() => setFocusedInput(null)}
+                  secureTextEntry={!showPassword}
+                  autoCapitalize="none"
+                  editable={!isLoading}
+                />
+                <TouchableOpacity
+                  style={styles.eyeButton}
+                  onPress={() => setShowPassword(!showPassword)}
+                >
+                  <Text style={styles.eyeText}>{showPassword ? 'Hide' : 'Show'}</Text>
+                </TouchableOpacity>
+              </View>
+            </View>
+
+            <TouchableOpacity
+              style={[styles.button, isLoading && styles.buttonDisabled]}
+              onPress={handleLogin}
+              disabled={isLoading}
+              activeOpacity={0.8}
+            >
+              {isLoading ? (
+                <ActivityIndicator color="#000" size="small" />
+              ) : (
+                <Text style={styles.buttonText}>Sign In</Text>
+              )}
             </TouchableOpacity>
-          </Link>
-        </View>
-      </ScrollView>
-    </KeyboardAvoidingView>
+          </View>
+
+          <View style={styles.footer}>
+            <Text style={styles.footerText}>Don't have an account? </Text>
+            <Link href="/(auth)/signup" asChild>
+              <TouchableOpacity disabled={isLoading}>
+                <Text style={styles.linkText}>Create Account</Text>
+              </TouchableOpacity>
+            </Link>
+          </View>
+        </ScrollView>
+      </KeyboardAvoidingView>
+    </View>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#1a1a2e',
+    backgroundColor: '#000',
+  },
+  keyboardView: {
+    flex: 1,
   },
   scrollContent: {
     flexGrow: 1,
@@ -145,95 +164,105 @@ const styles = StyleSheet.create({
   },
   header: {
     alignItems: 'center',
-    marginBottom: 40,
+    marginBottom: 48,
   },
-  logo: {
-    fontSize: 64,
-    marginBottom: 16,
+  logoContainer: {
+    marginBottom: 32,
+  },
+  logoBox: {
+    width: 72,
+    height: 72,
+    backgroundColor: '#fff',
+    borderRadius: 18,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  logoIcon: {
+    fontSize: 32,
+    fontWeight: '900',
+    color: '#000',
   },
   title: {
     fontSize: 32,
     fontWeight: '700',
-    color: '#ffffff',
+    color: '#fff',
     marginBottom: 8,
   },
   subtitle: {
     fontSize: 16,
-    color: '#a0a0c0',
+    color: '#888',
   },
-  form: {
-    marginBottom: 32,
+  formCard: {
+    backgroundColor: '#111',
+    borderRadius: 20,
+    padding: 24,
+    borderWidth: 1,
+    borderColor: '#222',
   },
-  inputContainer: {
-    marginBottom: 20,
+  inputWrapper: {
+    marginBottom: 24,
   },
   label: {
-    fontSize: 14,
+    fontSize: 12,
     fontWeight: '600',
-    color: '#ffffff',
-    marginBottom: 8,
+    color: '#888',
+    marginBottom: 10,
+    letterSpacing: 1.5,
   },
-  input: {
-    backgroundColor: '#2d2d4f',
-    borderRadius: 12,
-    padding: 16,
-    fontSize: 16,
-    color: '#ffffff',
-    borderWidth: 1,
-    borderColor: '#3d3d5f',
-  },
-  passwordContainer: {
+  inputContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#2d2d4f',
+    backgroundColor: '#1a1a1a',
     borderRadius: 12,
     borderWidth: 1,
-    borderColor: '#3d3d5f',
+    borderColor: '#333',
+    paddingHorizontal: 16,
   },
-  passwordInput: {
+  inputFocused: {
+    borderColor: '#fff',
+  },
+  input: {
     flex: 1,
-    padding: 16,
+    paddingVertical: 16,
     fontSize: 16,
-    color: '#ffffff',
+    color: '#fff',
   },
   eyeButton: {
-    padding: 16,
+    padding: 8,
   },
-  eyeIcon: {
-    fontSize: 20,
+  eyeText: {
+    fontSize: 13,
+    color: '#888',
+    fontWeight: '600',
   },
   button: {
-    backgroundColor: '#6c5ce7',
+    backgroundColor: '#fff',
     borderRadius: 12,
     padding: 18,
     alignItems: 'center',
     marginTop: 8,
-    shadowColor: '#6c5ce7',
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.3,
-    shadowRadius: 8,
-    elevation: 4,
   },
   buttonDisabled: {
-    opacity: 0.7,
+    opacity: 0.5,
   },
   buttonText: {
-    color: '#ffffff',
-    fontSize: 18,
+    color: '#000',
+    fontSize: 16,
     fontWeight: '700',
   },
   footer: {
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
+    marginTop: 32,
   },
   footerText: {
-    color: '#a0a0c0',
-    fontSize: 16,
+    color: '#666',
+    fontSize: 15,
   },
   linkText: {
-    color: '#6c5ce7',
-    fontSize: 16,
+    color: '#fff',
+    fontSize: 15,
     fontWeight: '600',
   },
 });

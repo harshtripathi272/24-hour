@@ -1,8 +1,5 @@
 /**
- * Signup Screen
- * 
- * Allows users to create a new account.
- * Pure UI component - all business logic is in AuthContext.
+ * Signup Screen - Clean Black & White Theme
  */
 import React, { useState } from 'react';
 import {
@@ -27,11 +24,11 @@ export default function SignupScreen() {
   const [confirmPassword, setConfirmPassword] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
+  const [focusedInput, setFocusedInput] = useState<string | null>(null);
   
   const { signup } = useAuth();
 
   const handleSignup = async () => {
-    // Basic UI validation only - backend handles real validation
     if (!name.trim()) {
       Alert.alert('Error', 'Please enter your name');
       return;
@@ -52,7 +49,6 @@ export default function SignupScreen() {
     setIsLoading(true);
     try {
       await signup(name.trim(), email.trim(), password);
-      // Navigation is handled automatically by the root layout
     } catch (error: unknown) {
       const errorMessage = 
         error instanceof Error 
@@ -64,117 +60,107 @@ export default function SignupScreen() {
     }
   };
 
-  return (
-    <KeyboardAvoidingView
-      style={styles.container}
-      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-    >
-      <ScrollView
-        contentContainerStyle={styles.scrollContent}
-        keyboardShouldPersistTaps="handled"
-      >
-        <View style={styles.header}>
-          <Text style={styles.logo}>🎬</Text>
-          <Text style={styles.title}>Create Account</Text>
-          <Text style={styles.subtitle}>Join us and start watching</Text>
-        </View>
-
-        <View style={styles.form}>
-          <View style={styles.inputContainer}>
-            <Text style={styles.label}>Name</Text>
-            <TextInput
-              style={styles.input}
-              placeholder="Enter your name"
-              placeholderTextColor="#6c6c8f"
-              value={name}
-              onChangeText={setName}
-              autoCapitalize="words"
-              editable={!isLoading}
-            />
-          </View>
-
-          <View style={styles.inputContainer}>
-            <Text style={styles.label}>Email</Text>
-            <TextInput
-              style={styles.input}
-              placeholder="Enter your email"
-              placeholderTextColor="#6c6c8f"
-              value={email}
-              onChangeText={setEmail}
-              keyboardType="email-address"
-              autoCapitalize="none"
-              autoCorrect={false}
-              editable={!isLoading}
-            />
-          </View>
-
-          <View style={styles.inputContainer}>
-            <Text style={styles.label}>Password</Text>
-            <View style={styles.passwordContainer}>
-              <TextInput
-                style={styles.passwordInput}
-                placeholder="Create a password"
-                placeholderTextColor="#6c6c8f"
-                value={password}
-                onChangeText={setPassword}
-                secureTextEntry={!showPassword}
-                autoCapitalize="none"
-                editable={!isLoading}
-              />
-              <TouchableOpacity
-                style={styles.eyeButton}
-                onPress={() => setShowPassword(!showPassword)}
-              >
-                <Text style={styles.eyeIcon}>{showPassword ? '👁️' : '👁️‍🗨️'}</Text>
-              </TouchableOpacity>
-            </View>
-            <Text style={styles.hint}>At least 6 characters with letters and numbers</Text>
-          </View>
-
-          <View style={styles.inputContainer}>
-            <Text style={styles.label}>Confirm Password</Text>
-            <TextInput
-              style={styles.input}
-              placeholder="Confirm your password"
-              placeholderTextColor="#6c6c8f"
-              value={confirmPassword}
-              onChangeText={setConfirmPassword}
-              secureTextEntry={!showPassword}
-              autoCapitalize="none"
-              editable={!isLoading}
-            />
-          </View>
-
+  const renderInput = (
+    label: string,
+    value: string,
+    setValue: (text: string) => void,
+    placeholder: string,
+    fieldName: string,
+    options: { secure?: boolean; keyboard?: 'email-address' | 'default' } = {}
+  ) => (
+    <View style={styles.inputWrapper}>
+      <Text style={styles.label}>{label}</Text>
+      <View style={[
+        styles.inputContainer,
+        focusedInput === fieldName && styles.inputFocused
+      ]}>
+        <TextInput
+          style={styles.input}
+          placeholder={placeholder}
+          placeholderTextColor="#666"
+          value={value}
+          onChangeText={setValue}
+          onFocus={() => setFocusedInput(fieldName)}
+          onBlur={() => setFocusedInput(null)}
+          secureTextEntry={options.secure && !showPassword}
+          keyboardType={options.keyboard || 'default'}
+          autoCapitalize={options.keyboard === 'email-address' ? 'none' : 'words'}
+          editable={!isLoading}
+        />
+        {options.secure && (
           <TouchableOpacity
-            style={[styles.button, isLoading && styles.buttonDisabled]}
-            onPress={handleSignup}
-            disabled={isLoading}
+            style={styles.eyeButton}
+            onPress={() => setShowPassword(!showPassword)}
           >
-            {isLoading ? (
-              <ActivityIndicator color="#fff" />
-            ) : (
-              <Text style={styles.buttonText}>Create Account</Text>
-            )}
+            <Text style={styles.eyeText}>{showPassword ? 'Hide' : 'Show'}</Text>
           </TouchableOpacity>
-        </View>
+        )}
+      </View>
+    </View>
+  );
 
-        <View style={styles.footer}>
-          <Text style={styles.footerText}>Already have an account? </Text>
-          <Link href="/(auth)/login" asChild>
-            <TouchableOpacity disabled={isLoading}>
-              <Text style={styles.linkText}>Sign In</Text>
+  return (
+    <View style={styles.container}>
+      <KeyboardAvoidingView
+        style={styles.keyboardView}
+        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+      >
+        <ScrollView
+          contentContainerStyle={styles.scrollContent}
+          keyboardShouldPersistTaps="handled"
+          showsVerticalScrollIndicator={false}
+        >
+          <View style={styles.header}>
+            <View style={styles.logoContainer}>
+              <View style={styles.logoBox}>
+                <Text style={styles.logoIcon}>V</Text>
+              </View>
+            </View>
+            <Text style={styles.title}>Create Account</Text>
+            <Text style={styles.subtitle}>Join and start watching</Text>
+          </View>
+
+          <View style={styles.formCard}>
+            {renderInput('FULL NAME', name, setName, 'John Doe', 'name')}
+            {renderInput('EMAIL', email, setEmail, 'you@example.com', 'email', { keyboard: 'email-address' })}
+            {renderInput('PASSWORD', password, setPassword, 'Min 6 characters', 'password', { secure: true })}
+            {renderInput('CONFIRM PASSWORD', confirmPassword, setConfirmPassword, 'Repeat password', 'confirm', { secure: true })}
+
+            <TouchableOpacity
+              style={[styles.button, isLoading && styles.buttonDisabled]}
+              onPress={handleSignup}
+              disabled={isLoading}
+              activeOpacity={0.8}
+            >
+              {isLoading ? (
+                <ActivityIndicator color="#000" size="small" />
+              ) : (
+                <Text style={styles.buttonText}>Create Account</Text>
+              )}
             </TouchableOpacity>
-          </Link>
-        </View>
-      </ScrollView>
-    </KeyboardAvoidingView>
+          </View>
+
+          <View style={styles.footer}>
+            <Text style={styles.footerText}>Already have an account? </Text>
+            <Link href="/(auth)/login" asChild>
+              <TouchableOpacity disabled={isLoading}>
+                <Text style={styles.linkText}>Sign In</Text>
+              </TouchableOpacity>
+            </Link>
+          </View>
+        </ScrollView>
+      </KeyboardAvoidingView>
+    </View>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#1a1a2e',
+    backgroundColor: '#000',
+  },
+  keyboardView: {
+    flex: 1,
   },
   scrollContent: {
     flexGrow: 1,
@@ -183,100 +169,105 @@ const styles = StyleSheet.create({
   },
   header: {
     alignItems: 'center',
-    marginBottom: 32,
+    marginBottom: 36,
   },
-  logo: {
-    fontSize: 64,
-    marginBottom: 16,
+  logoContainer: {
+    marginBottom: 24,
+  },
+  logoBox: {
+    width: 64,
+    height: 64,
+    backgroundColor: '#fff',
+    borderRadius: 16,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  logoIcon: {
+    fontSize: 28,
+    fontWeight: '900',
+    color: '#000',
   },
   title: {
-    fontSize: 32,
+    fontSize: 28,
     fontWeight: '700',
-    color: '#ffffff',
+    color: '#fff',
     marginBottom: 8,
   },
   subtitle: {
-    fontSize: 16,
-    color: '#a0a0c0',
+    fontSize: 15,
+    color: '#888',
   },
-  form: {
-    marginBottom: 24,
+  formCard: {
+    backgroundColor: '#111',
+    borderRadius: 20,
+    padding: 24,
+    borderWidth: 1,
+    borderColor: '#222',
   },
-  inputContainer: {
-    marginBottom: 16,
+  inputWrapper: {
+    marginBottom: 20,
   },
   label: {
-    fontSize: 14,
+    fontSize: 11,
     fontWeight: '600',
-    color: '#ffffff',
+    color: '#888',
     marginBottom: 8,
+    letterSpacing: 1.5,
   },
-  input: {
-    backgroundColor: '#2d2d4f',
-    borderRadius: 12,
-    padding: 16,
-    fontSize: 16,
-    color: '#ffffff',
-    borderWidth: 1,
-    borderColor: '#3d3d5f',
-  },
-  passwordContainer: {
+  inputContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#2d2d4f',
+    backgroundColor: '#1a1a1a',
     borderRadius: 12,
     borderWidth: 1,
-    borderColor: '#3d3d5f',
+    borderColor: '#333',
+    paddingHorizontal: 16,
   },
-  passwordInput: {
+  inputFocused: {
+    borderColor: '#fff',
+  },
+  input: {
     flex: 1,
-    padding: 16,
-    fontSize: 16,
-    color: '#ffffff',
+    paddingVertical: 14,
+    fontSize: 15,
+    color: '#fff',
   },
   eyeButton: {
-    padding: 16,
+    padding: 8,
   },
-  eyeIcon: {
-    fontSize: 20,
-  },
-  hint: {
+  eyeText: {
     fontSize: 12,
-    color: '#6c6c8f',
-    marginTop: 6,
+    color: '#888',
+    fontWeight: '600',
   },
   button: {
-    backgroundColor: '#6c5ce7',
+    backgroundColor: '#fff',
     borderRadius: 12,
-    padding: 18,
+    padding: 16,
     alignItems: 'center',
     marginTop: 8,
-    shadowColor: '#6c5ce7',
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.3,
-    shadowRadius: 8,
-    elevation: 4,
   },
   buttonDisabled: {
-    opacity: 0.7,
+    opacity: 0.5,
   },
   buttonText: {
-    color: '#ffffff',
-    fontSize: 18,
+    color: '#000',
+    fontSize: 16,
     fontWeight: '700',
   },
   footer: {
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
+    marginTop: 28,
   },
   footerText: {
-    color: '#a0a0c0',
-    fontSize: 16,
+    color: '#666',
+    fontSize: 15,
   },
   linkText: {
-    color: '#6c5ce7',
-    fontSize: 16,
+    color: '#fff',
+    fontSize: 15,
     fontWeight: '600',
   },
 });
