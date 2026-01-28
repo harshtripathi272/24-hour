@@ -108,8 +108,8 @@ def get_stream(video_id):
         }), 404
     
     # Generate embed URL (NOT raw YouTube URL)
-    # Using youtube-nocookie for privacy-enhanced mode
-    embed_url = f"https://www.youtube-nocookie.com/embed/{video.youtube_id}?autoplay=1&rel=0&modestbranding=1"
+    # Using standard embed with parameters that enable playback on mobile
+    embed_url = f"https://www.youtube.com/embed/{video.youtube_id}?autoplay=1&playsinline=1&rel=0&modestbranding=1&enablejsapi=1"
     
     current_app.logger.info(f'Stream accessed: video={video_id}, user={get_current_user().email}')
     

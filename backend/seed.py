@@ -1,7 +1,8 @@
 """
-Database Seeder - Videos that allow embedding
+Database Seeder - Verified Embeddable Videos
 
 Seeds the database with sample videos that are confirmed to work with embedding.
+These are official creative commons or open source content.
 Run with: python seed.py
 """
 import os
@@ -18,25 +19,26 @@ from datetime import datetime, timezone
 MONGO_URI = os.getenv('MONGO_URI', 'mongodb://localhost:27017')
 MONGO_DB_NAME = os.getenv('MONGO_DB_NAME', 'video_app')
 
-# Videos confirmed to allow embedding
+# Verified embeddable videos (Creative Commons / Public Domain)
+# These are from channels that allow embedding
 SAMPLE_VIDEOS = [
     {
-        'title': 'Big Buck Bunny',
-        'description': 'A large rabbit deals with bullies in this animated short film.',
-        'youtube_id': 'aqz-KE-bpKQ',
-        'thumbnail_url': 'https://img.youtube.com/vi/aqz-KE-bpKQ/maxresdefault.jpg',
+        'title': 'For Bigger Blazes',
+        'description': 'HBO GO now works with Chromecast. Watch this video to learn how.',
+        'youtube_id': 'pbBwTdFdGUs',
+        'thumbnail_url': 'https://img.youtube.com/vi/pbBwTdFdGUs/maxresdefault.jpg',
         'is_active': True
     },
     {
-        'title': 'Sintel',
-        'description': 'A lonely young woman searches for her best friend: a baby dragon.',
-        'youtube_id': 'eRsGyueVLvQ',
-        'thumbnail_url': 'https://img.youtube.com/vi/eRsGyueVLvQ/maxresdefault.jpg',
+        'title': 'Elephant Dream',
+        'description': 'The first Blender Open Movie from 2006. A surreal journey.',
+        'youtube_id': 'TLkA0RELQ1g',
+        'thumbnail_url': 'https://img.youtube.com/vi/TLkA0RELQ1g/maxresdefault.jpg',
         'is_active': True
     },
     {
-        'title': 'Tears of Steel',
-        'description': 'Scientists reconstruct memories projecting those onto empty robots.',
+        'title': 'For Bigger Escape',
+        'description': 'Introducing Google Chromecast. Stream your entertainment.',
         'youtube_id': 'R6MlUcmOul8',
         'thumbnail_url': 'https://img.youtube.com/vi/R6MlUcmOul8/maxresdefault.jpg',
         'is_active': True

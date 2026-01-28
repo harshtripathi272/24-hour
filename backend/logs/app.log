@@ -18,3 +18,7 @@
 2026-01-28 01:38:51,525 INFO: User logged in: thebeasts9876@gmail.com [in D:\Workspace\24-hour\backend\app\routes\auth.py:198]
 2026-01-28 01:38:58,096 INFO: Stream accessed: video=69791b23a6636ede4b44a530, user=thebeasts9876@gmail.com [in D:\Workspace\24-hour\backend\app\routes\video.py:114]
 2026-01-28 01:39:10,553 INFO: User logged out: thebeasts9876@gmail.com [in D:\Workspace\24-hour\backend\app\routes\auth.py:248]
+2026-01-28 13:42:50,629 INFO: Application started successfully [in D:\Workspace\24-hour\backend\app\__init__.py:52]
+2026-01-28 13:42:51,029 INFO: Application started successfully [in D:\Workspace\24-hour\backend\app\__init__.py:52]
+2026-01-28 13:48:44,931 INFO: User logged in: thebeasts9876@gmail.com [in D:\Workspace\24-hour\backend\app\routes\auth.py:198]
+2026-01-28 13:48:48,729 INFO: Stream accessed: video=6979c4ea6354c1efe3baf728, user=thebeasts9876@gmail.com [in D:\Workspace\24-hour\backend\app\routes\video.py:114]
