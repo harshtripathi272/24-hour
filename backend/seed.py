@@ -19,28 +19,28 @@ from datetime import datetime, timezone
 MONGO_URI = os.getenv('MONGO_URI', 'mongodb://localhost:27017')
 MONGO_DB_NAME = os.getenv('MONGO_DB_NAME', 'video_app')
 
-# CarryMinati and TMKOC Videos
-# Note: Some videos may have embedding restrictions
+# Videos that are GUARANTEED to allow embedding
+# These are open source / Creative Commons videos
 SAMPLE_VIDEOS = [
     {
-        'title': 'CarryMinati - Yalgaar',
-        'description': 'The most iconic CarryMinati rap song with over 300M views!',
-        'youtube_id': 'zzwRbKI2pn4',
-        'thumbnail_url': 'https://img.youtube.com/vi/zzwRbKI2pn4/maxresdefault.jpg',
+        'title': 'Big Buck Bunny',
+        'description': 'A famous open-source animated short film by Blender Foundation.',
+        'youtube_id': 'aqz-KE-bpKQ',
+        'thumbnail_url': 'https://img.youtube.com/vi/aqz-KE-bpKQ/maxresdefault.jpg',
         'is_active': True
     },
     {
-        'title': 'CarryMinati - Vardaan',
-        'description': 'Another hit rap song by CarryMinati featuring Wily Frenzy.',
-        'youtube_id': 'vDKB4CCKXss',
-        'thumbnail_url': 'https://img.youtube.com/vi/vDKB4CCKXss/maxresdefault.jpg',
+        'title': 'Sintel - Open Movie',
+        'description': 'Award-winning fantasy short film by Blender Foundation.',
+        'youtube_id': 'eRsGyueVLvQ',
+        'thumbnail_url': 'https://img.youtube.com/vi/eRsGyueVLvQ/maxresdefault.jpg',
         'is_active': True
     },
     {
-        'title': 'TMKOC - Jethalal Best Moments',
-        'description': 'Funniest Jethalal moments from Taarak Mehta Ka Ooltah Chashmah.',
-        'youtube_id': 'U1tSaHJy4C4',
-        'thumbnail_url': 'https://img.youtube.com/vi/U1tSaHJy4C4/maxresdefault.jpg',
+        'title': 'Tears of Steel',
+        'description': 'Sci-fi short film combining live action with CGI by Blender Foundation.',
+        'youtube_id': 'R6MlUcmOul8',
+        'thumbnail_url': 'https://img.youtube.com/vi/R6MlUcmOul8/maxresdefault.jpg',
         'is_active': True
     }
 ]
