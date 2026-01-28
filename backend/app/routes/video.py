@@ -108,8 +108,9 @@ def get_stream(video_id):
         }), 404
     
     # Generate embed URL (NOT raw YouTube URL)
-    # Using standard embed with parameters that enable playback on mobile
-    embed_url = f"https://www.youtube.com/embed/{video.youtube_id}?autoplay=1&playsinline=1&rel=0&modestbranding=1&enablejsapi=1"
+    # Using youtube-nocookie for privacy and better WebView compatibility
+    # Removed enablejsapi to avoid error 153 in WebView (no valid origin)
+    embed_url = f"https://www.youtube-nocookie.com/embed/{video.youtube_id}?autoplay=1&playsinline=1&rel=0&modestbranding=1&controls=1"
     
     current_app.logger.info(f'Stream accessed: video={video_id}, user={get_current_user().email}')
     

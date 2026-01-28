@@ -55,6 +55,7 @@ export default function VideoPlayer({ streamUrl, title, onWatchProgress }: Video
   }, [onWatchProgress]);
 
   // Create HTML wrapper for the YouTube embed
+  // Added origin parameter to fix error 153 (player configuration error)
   const html = `
     <!DOCTYPE html>
     <html>
@@ -77,7 +78,7 @@ export default function VideoPlayer({ streamUrl, title, onWatchProgress }: Video
       </head>
       <body>
         <iframe
-          src="${streamUrl}&enablejsapi=1&playsinline=1"
+          src="${streamUrl}"
           allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
           allowfullscreen
         ></iframe>

@@ -103,7 +103,7 @@ export default function VideoScreen() {
       </head>
       <body>
         <iframe
-          src="${url}&enablejsapi=1&playsinline=1&controls=1&rel=0"
+          src="${url}"
           allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
           allowfullscreen
         ></iframe>

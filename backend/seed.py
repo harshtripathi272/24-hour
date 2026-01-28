@@ -19,28 +19,28 @@ from datetime import datetime, timezone
 MONGO_URI = os.getenv('MONGO_URI', 'mongodb://localhost:27017')
 MONGO_DB_NAME = os.getenv('MONGO_DB_NAME', 'video_app')
 
-# Verified embeddable videos (Creative Commons / Public Domain)
-# These are from channels that allow embedding
+# CarryMinati and TMKOC Videos
+# Note: Some videos may have embedding restrictions
 SAMPLE_VIDEOS = [
     {
-        'title': 'For Bigger Blazes',
-        'description': 'HBO GO now works with Chromecast. Watch this video to learn how.',
-        'youtube_id': 'pbBwTdFdGUs',
-        'thumbnail_url': 'https://img.youtube.com/vi/pbBwTdFdGUs/maxresdefault.jpg',
+        'title': 'CarryMinati - Yalgaar',
+        'description': 'The most iconic CarryMinati rap song with over 300M views!',
+        'youtube_id': 'zzwRbKI2pn4',
+        'thumbnail_url': 'https://img.youtube.com/vi/zzwRbKI2pn4/maxresdefault.jpg',
         'is_active': True
     },
     {
-        'title': 'Elephant Dream',
-        'description': 'The first Blender Open Movie from 2006. A surreal journey.',
-        'youtube_id': 'TLkA0RELQ1g',
-        'thumbnail_url': 'https://img.youtube.com/vi/TLkA0RELQ1g/maxresdefault.jpg',
+        'title': 'CarryMinati - Vardaan',
+        'description': 'Another hit rap song by CarryMinati featuring Wily Frenzy.',
+        'youtube_id': 'vDKB4CCKXss',
+        'thumbnail_url': 'https://img.youtube.com/vi/vDKB4CCKXss/maxresdefault.jpg',
         'is_active': True
     },
     {
-        'title': 'For Bigger Escape',
-        'description': 'Introducing Google Chromecast. Stream your entertainment.',
-        'youtube_id': 'R6MlUcmOul8',
-        'thumbnail_url': 'https://img.youtube.com/vi/R6MlUcmOul8/maxresdefault.jpg',
+        'title': 'TMKOC - Jethalal Best Moments',
+        'description': 'Funniest Jethalal moments from Taarak Mehta Ka Ooltah Chashmah.',
+        'youtube_id': 'U1tSaHJy4C4',
+        'thumbnail_url': 'https://img.youtube.com/vi/U1tSaHJy4C4/maxresdefault.jpg',
         'is_active': True
     }
 ]
