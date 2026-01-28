@@ -1,0 +1,18 @@
+# Environment files (contains secrets!)
+.env
+.env.local
+.env.*.local
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Personal files (don't push these)
+UNDERSTANDING.md
+LOOM_SCRIPT.md
