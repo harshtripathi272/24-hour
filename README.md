@@ -339,6 +339,4 @@ const API_BASE_URL = 'http://10.0.2.2:5000'; // Android emulator
 - **Mobile**: React Native, Expo, Expo Router, Axios
 - **Security**: JWT, Signed Playback Tokens, Secure Storage
 
-## License
 
-MIT
