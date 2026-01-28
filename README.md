@@ -1,8 +1,8 @@
-# 🎬 API-First Video App
+# API-First Video App
 
 A full-stack video streaming application demonstrating **API-first architecture** where the React Native mobile app acts as a thin client, with all business logic residing in the Flask backend.
 
-## 🏗️ Architecture
+## Architecture
 
 ```
 React Native App  →  Flask API  →  MongoDB
@@ -12,24 +12,24 @@ React Native App  →  Flask API  →  MongoDB
 
 **Key Principle**: The mobile app never directly accesses YouTube. All video URLs are abstracted behind secure, signed playback tokens.
 
-## ✨ Features
+## Features
 
 ### Backend (Flask)
-- 🔐 JWT Authentication with refresh tokens
-- 🔒 Bcrypt password hashing
-- 🎥 Secure video streaming with signed playback tokens
-- ⏱️ Rate limiting (5 login attempts/minute)
-- 📝 Request logging to file
-- 📊 Video watch tracking
+- JWT Authentication with refresh tokens
+- Bcrypt password hashing
+- Secure video streaming with signed playback tokens
+- Rate limiting (5 login attempts/minute)
+- Request logging to file
+- Video watch tracking
 
 ### Mobile (React Native)
-- 📱 Clean, modern UI with dark theme
-- 🔑 Secure token storage (expo-secure-store)
-- 🎬 Video player with controls (play/pause, mute)
-- 🔄 Pull-to-refresh on dashboard
-- 🚪 Proper logout with token invalidation
+- Clean, modern UI with dark theme
+- Secure token storage (expo-secure-store)
+- Video player with controls (play/pause, mute)
+- Pull-to-refresh on dashboard
+- Proper logout with token invalidation
 
-## 📁 Project Structure
+## Project Structure
 
 ```
 24-hour/
@@ -54,15 +54,45 @@ React Native App  →  Flask API  →  MongoDB
 └── README.md
 ```
 
-## 🚀 Quick Start
+## Quick Start
 
 ### Prerequisites
 - Python 3.8+
 - Node.js 18+
-- MongoDB (local or Atlas)
+- MongoDB (Atlas recommended, or local)
 - Expo Go app on your phone (for testing)
 
-### Backend Setup
+---
+
+### Step 1: MongoDB Setup
+
+#### Option A: MongoDB Atlas (Recommended - Free Cloud Database)
+
+1. Go to [MongoDB Atlas](https://www.mongodb.com/cloud/atlas) and create a free account
+2. Create a new cluster (free tier is fine)
+3. Click "Connect" → "Connect your application"
+4. Copy the connection string, it looks like:
+   ```
+   mongodb+srv://username:password@cluster0.xxxxx.mongodb.net/video_app
+   ```
+5. Use this as your `MONGO_URI` in the `.env` file
+
+#### Option B: MongoDB Compass (Local GUI)
+
+1. Download [MongoDB Compass](https://www.mongodb.com/try/download/compass)
+2. Install and run MongoDB locally first (`mongod`)
+3. Connect Compass to `mongodb://localhost:27017`
+4. Use `mongodb://localhost:27017` as your `MONGO_URI`
+
+#### Option C: Local MongoDB Only
+
+1. Install MongoDB Community Server
+2. Run `mongod` in a terminal
+3. Use `mongodb://localhost:27017` as your `MONGO_URI`
+
+---
+
+### Step 2: Backend Setup
 
 ```bash
 # 1. Navigate to backend
@@ -71,31 +101,36 @@ cd backend
 # 2. Create virtual environment
 python -m venv venv
 
-# Windows
+# 3. Activate virtual environment
+# Windows:
 venv\Scripts\activate
-# macOS/Linux
+# macOS/Linux:
 source venv/bin/activate
 
-# 3. Install dependencies
+# 4. Install dependencies
 pip install -r requirements.txt
 
-# 4. Copy environment file
-copy .env.example .env  # Windows
-# cp .env.example .env  # macOS/Linux
+# 5. Copy environment file
+# Windows:
+copy .env.example .env
+# macOS/Linux:
+cp .env.example .env
 
-# 5. Start MongoDB (if local)
-mongod
+# 6. Update .env with your MongoDB URI (if using Atlas/Compass)
+# MONGO_URI=mongodb+srv://username:password@cluster.mongodb.net/video_app
 
-# 6. Seed the database
+# 7. Seed the database with sample videos
 python seed.py
 
-# 7. Run the server
+# 8. Run the server
 python run.py
 ```
 
 The API will be available at `http://localhost:5000`
 
-### Mobile Setup
+---
+
+### Step 3: Mobile Setup
 
 ```bash
 # 1. Navigate to mobile
@@ -104,18 +139,78 @@ cd mobile
 # 2. Install dependencies
 npm install
 
-# 3. Update API URL in services/api.ts
-# For Android emulator: http://10.0.2.2:5000
-# For iOS simulator: http://localhost:5000
-# For physical device: http://<your-computer-ip>:5000
-
-# 4. Start Expo
+# 3. Start Expo
 npx expo start
 ```
 
-Scan the QR code with Expo Go app to run on your device.
+Scan the QR code with **Expo Go** app to run on your device.
 
-## 🔑 API Endpoints
+---
+
+### Step 4: Configure API URL (Important!)
+
+You need to update the API URL in `mobile/services/api.ts` based on your setup:
+
+#### For Android Emulator:
+```typescript
+const API_BASE_URL = 'http://10.0.2.2:5000';
+```
+
+#### For iOS Simulator:
+```typescript
+const API_BASE_URL = 'http://localhost:5000';
+```
+
+#### For Physical Device (Phone):
+You need your computer's local IP address:
+
+```typescript
+const API_BASE_URL = 'http://YOUR_IP_ADDRESS:5000';
+```
+
+**How to find your IP address:**
+
+<details>
+<summary><b>Windows</b></summary>
+
+```bash
+# Open Command Prompt and run:
+ipconfig
+
+# Look for "IPv4 Address" under your active network adapter
+# Example: 192.168.1.100
+```
+</details>
+
+<details>
+<summary><b>macOS</b></summary>
+
+```bash
+# Open Terminal and run:
+ipconfig getifaddr en0
+
+# Or go to: System Preferences → Network → Select your connection → IP Address
+# Example: 192.168.1.100
+```
+</details>
+
+<details>
+<summary><b>Linux</b></summary>
+
+```bash
+# Open Terminal and run:
+hostname -I | awk '{print $1}'
+
+# Or:
+ip addr show | grep "inet " | grep -v 127.0.0.1
+
+# Example: 192.168.1.100
+```
+</details>
+
+> **Note:** Make sure your phone and computer are on the same WiFi network!
+
+## API Endpoints
 
 ### Authentication
 
@@ -135,7 +230,7 @@ Scan the QR code with Expo Go app to run on your device.
 | GET | `/video/<id>/stream` | Get stream URL | JWT + Playback Token |
 | POST | `/video/<id>/track` | Track watch event | JWT |
 
-## 🔒 Security: YouTube URL Abstraction
+## Security: YouTube URL Abstraction
 
 ### The Problem
 The requirement states apps should NOT expose YouTube URLs like `https://youtube.com/watch?v=abc123`.
@@ -162,18 +257,20 @@ The requirement states apps should NOT expose YouTube URLs like `https://youtube
 3. **Stream Response**
    ```json
    {
-     "stream_url": "https://www.youtube-nocookie.com/embed/xyz?autoplay=1",
+     "youtube_id": "aqz-KE-bpKQ",
+     "video_id": "...",
+     "title": "Big Buck Bunny",
      "expires_at": 1706400000
    }
-   ```
+   ```  
 
 ### Security Benefits
-- ✅ Dashboard never exposes YouTube IDs
-- ✅ Playback tokens are signed and time-limited (1 hour)
-- ✅ Tokens are video-specific (can't reuse for other videos)
-- ✅ Using youtube-nocookie for privacy-enhanced embedding
+- Dashboard never exposes YouTube IDs
+- Playback tokens are signed and time-limited (1 hour)
+- Tokens are video-specific (can't reuse for other videos)
+- Using react-native-youtube-iframe for reliable playback
 
-## 🧪 Testing
+## Testing
 
 ### Test API with curl
 
@@ -197,17 +294,17 @@ curl "http://localhost:5000/video/<id>/stream?token=<playback_token>" \
   -H "Authorization: Bearer <access_token>"
 ```
 
-## ⭐ Bonus Features Implemented
+## Bonus Features Implemented
 
 | Feature | Status | Description |
 |---------|--------|-------------|
-| Refresh Tokens | ✅ | `/auth/refresh` endpoint |
-| Token Expiry | ✅ | 15min access, 7 days refresh |
-| Rate Limiting | ✅ | 5 login attempts/minute |
-| Logging | ✅ | Rotating file logs in `logs/` |
-| Watch Tracking | ✅ | `/video/<id>/track` endpoint |
+| Refresh Tokens | Yes | `/auth/refresh` endpoint |
+| Token Expiry | Yes | 15min access, 7 days refresh |
+| Rate Limiting | Yes | 5 login attempts/minute |
+| Logging | Yes | Rotating file logs in `logs/` |
+| Watch Tracking | Yes | `/video/<id>/track` endpoint |
 
-## 📝 Environment Variables
+## Environment Variables
 
 ### Backend (.env)
 ```
@@ -226,7 +323,7 @@ Update `API_BASE_URL` in `services/api.ts`:
 const API_BASE_URL = 'http://10.0.2.2:5000'; // Android emulator
 ```
 
-## 🎥 Demo Flow
+## Demo Flow
 
 1. **Signup** → Creates account with hashed password
 2. **Login** → Receives JWT tokens, stored securely
@@ -235,13 +332,13 @@ const API_BASE_URL = 'http://10.0.2.2:5000'; // Android emulator
 5. **Video Player** → Plays embedded video with controls
 6. **Settings** → Shows profile, logout clears tokens
 
-## 🛠️ Tech Stack
+## Tech Stack
 
 - **Backend**: Flask, PyMongo, PyJWT, bcrypt, Flask-Limiter
 - **Database**: MongoDB
 - **Mobile**: React Native, Expo, Expo Router, Axios
 - **Security**: JWT, Signed Playback Tokens, Secure Storage
 
-## 📄 License
+## License
 
 MIT

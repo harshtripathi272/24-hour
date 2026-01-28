@@ -8,9 +8,11 @@
 import axios, { AxiosInstance, AxiosError } from 'axios';
 import * as SecureStore from 'expo-secure-store';
 
-// API Base URL - use 10.0.2.2 for Android emulator, localhost for iOS simulator
-// For physical devices, use your computer's IP address
-const API_BASE_URL = 'http://10.50.45.167:5000';
+// API Base URL - CHANGE THIS BASED ON YOUR SETUP:
+// - Android emulator: http://10.0.2.2:5000
+// - iOS simulator: http://localhost:5000  
+// - Physical device: http://<YOUR_COMPUTER_IP>:5000
+const API_BASE_URL = 'http://10.0.2.2:5000';
 
 // Token storage keys
 const ACCESS_TOKEN_KEY = 'access_token';
