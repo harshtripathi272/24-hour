@@ -1,5 +1,5 @@
 /**
- * Video Player Screen - Clean Black & White Theme with Fixed Playback
+ * Video Player Screen - Using react-native-youtube-iframe for reliable playback
  */
 import React, { useEffect, useState, useCallback, useRef } from 'react';
 import {
@@ -11,7 +11,7 @@ import {
   SafeAreaView,
 } from 'react-native';
 import { useLocalSearchParams, useRouter } from 'expo-router';
-import { WebView } from 'react-native-webview';
+import YoutubePlayer from 'react-native-youtube-iframe';
 import { VideoAPI, StreamResponse } from '../../../services/api';
 
 export default function VideoScreen() {
@@ -27,7 +27,6 @@ export default function VideoScreen() {
   const [error, setError] = useState<string | null>(null);
   const [isPlaying, setIsPlaying] = useState(true);
   const [isMuted, setIsMuted] = useState(false);
-  const webViewRef = useRef<WebView>(null);
   const watchStartTime = useRef<number>(Date.now());
 
   const fetchStreamUrl = useCallback(async () => {
@@ -68,48 +67,19 @@ export default function VideoScreen() {
     router.back();
   };
 
+  const onStateChange = useCallback((state: string) => {
+    if (state === 'ended') {
+      setIsPlaying(false);
+    }
+  }, []);
+
   const togglePlayPause = () => {
-    const command = isPlaying ? 'pauseVideo' : 'playVideo';
-    webViewRef.current?.injectJavaScript(`
-      try {
-        document.querySelector('iframe')?.contentWindow?.postMessage('{"event":"command","func":"${command}","args":""}', '*');
-      } catch(e) {}
-      true;
-    `);
     setIsPlaying(!isPlaying);
   };
 
   const toggleMute = () => {
-    const command = isMuted ? 'unMute' : 'mute';
-    webViewRef.current?.injectJavaScript(`
-      try {
-        document.querySelector('iframe')?.contentWindow?.postMessage('{"event":"command","func":"${command}","args":""}', '*');
-      } catch(e) {}
-      true;
-    `);
     setIsMuted(!isMuted);
   };
-
-  const getVideoHtml = (url: string) => `
-    <!DOCTYPE html>
-    <html>
-      <head>
-        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-        <style>
-          * { margin: 0; padding: 0; box-sizing: border-box; }
-          html, body { width: 100%; height: 100%; background: #000; overflow: hidden; }
-          iframe { width: 100%; height: 100%; border: none; }
-        </style>
-      </head>
-      <body>
-        <iframe
-          src="${url}"
-          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-          allowfullscreen
-        ></iframe>
-      </body>
-    </html>
-  `;
 
   if (isLoading) {
     return (
@@ -154,15 +124,16 @@ export default function VideoScreen() {
 
         <View style={styles.videoWrapper}>
           <View style={styles.videoContainer}>
-            <WebView
-              ref={webViewRef}
-              source={{ html: getVideoHtml(streamData.stream_url) }}
-              style={styles.webView}
-              allowsFullscreenVideo
-              mediaPlaybackRequiresUserAction={false}
-              javaScriptEnabled
-              domStorageEnabled
-              allowsInlineMediaPlayback
+            <YoutubePlayer
+              height={220}
+              play={isPlaying}
+              mute={isMuted}
+              videoId={streamData.youtube_id}
+              onChangeState={onStateChange}
+              webViewProps={{
+                allowsInlineMediaPlayback: true,
+                mediaPlaybackRequiresUserAction: false,
+              }}
             />
           </View>
         </View>
@@ -286,16 +257,11 @@ const styles = StyleSheet.create({
   },
   videoContainer: {
     width: '100%',
-    aspectRatio: 16 / 9,
     borderRadius: 16,
     overflow: 'hidden',
     backgroundColor: '#111',
     borderWidth: 1,
     borderColor: '#222',
-  },
-  webView: {
-    flex: 1,
-    backgroundColor: '#000',
   },
   infoSection: {
     padding: 20,

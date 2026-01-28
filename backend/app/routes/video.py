@@ -107,15 +107,12 @@ def get_stream(video_id):
             'message': 'Video is not available'
         }), 404
     
-    # Generate embed URL (NOT raw YouTube URL)
-    # Using youtube-nocookie for privacy and better WebView compatibility
-    # Removed enablejsapi to avoid error 153 in WebView (no valid origin)
-    embed_url = f"https://www.youtube-nocookie.com/embed/{video.youtube_id}?autoplay=1&playsinline=1&rel=0&modestbranding=1&controls=1"
-    
+    # Return YouTube ID for the mobile app to use with react-native-youtube-iframe
+    # This approach is more reliable than using embed URLs in WebView
     current_app.logger.info(f'Stream accessed: video={video_id}, user={get_current_user().email}')
     
     return jsonify({
-        'stream_url': embed_url,
+        'youtube_id': video.youtube_id,
         'video_id': video_id,
         'title': video.title,
         'expires_at': token_payload['exp']

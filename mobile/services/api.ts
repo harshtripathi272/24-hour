@@ -130,7 +130,7 @@ export interface AuthResponse {
 }
 
 export interface StreamResponse {
-  stream_url: string;
+  youtube_id: string;
   video_id: string;
   title: string;
   expires_at: number;
