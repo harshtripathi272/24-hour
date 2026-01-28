@@ -112,10 +112,10 @@ pip install -r requirements.txt
 
 # 5. Copy environment file
 # Windows:
-copy .env.example .env
+copy .env.example
 # macOS/Linux:
-cp .env.example .env
-
+cp .env.example
+#Update .env.example and use it as .env(or make a .env)
 # 6. Update .env with your MongoDB URI (if using Atlas/Compass)
 # MONGO_URI=mongodb+srv://username:password@cluster.mongodb.net/video_app
 
